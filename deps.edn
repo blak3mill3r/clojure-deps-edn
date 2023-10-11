@@ -81,6 +81,12 @@
   ;; `dev/user.clj` can define tools and code that runs when starting the REPL
   ;; https://practical.li/clojure/clojure-cli/repl-startup/
 
+  :lispy
+  {:extra-deps {cider/orchard              {:mvn/version "0.11.0"}
+                compliment/compliment      {:mvn/version "0.3.14"}
+                org.tcrawley/dynapath      {:mvn/version "1.0.0"}
+                org.clojure/java.classpath {:mvn/version "1.0.0"}}}
+
   ;; -M -X or -T execution options
   :dev/env
   {:extra-paths ["dev"]}
