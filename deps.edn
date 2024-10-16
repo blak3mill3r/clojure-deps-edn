@@ -377,15 +377,15 @@
   ;; Examples are from Ubuntu package install locations
 
   ;; clojure -M:lib/java17-source
-  :src/java17
+  :src/java
   {:extra-deps
-   {openjdk/java-sources {:local/root "/usr/lib/jvm/openjdk-17/lib/src.zip"}}}
+   {openjdk/java-sources {:local/root "/usr/lib/jvm/java-17-openjdk-amd64/lib/src.zip"}}}
 
   ;; Clojure core Java source code in src/jvm/clojure/lang/
   :src/clojure
   {:extra-paths ["src/jvm"]
    :extra-deps
-   {org.clojure/clojure-source {:local/root "/home/practicalli/projects/community/clojure.org/clojure"}}}
+   {org.clojure/clojure-source {:local/root "/home/blake/src/clojure"}}}
   ;; ---------------------------------------------------
 
   ;; ---------------------------------------------------
