@@ -64,7 +64,7 @@ outdated: ## Check deps.edn & GitHub actions for new versions
 # `-` before the command ignores any errors returned
 clean:  ## Clean build temporary files
 	$(info --------- Clean Clojure classpath cache ---------)
-	- rm -rf ./.cpcache
+	- rm -rf ./.cpcache .clj-kondo .lsp
 # ------------------------------------ #
 
 # ------- Testing -------------------- #
@@ -133,6 +133,10 @@ lint-fix:  ## Run MegaLinter with custom configuration (node.js required)
 lint-clean:  ## Clean MegaLinter report information
 	$(info --------- MegaLinter Clean Reports ---------)
 	- rm -rf ./megalinter-reports
+
+megalinter-upgrade:  ## Update MegaLinter config to latest version
+	$(info --------- MegaLinter Upgrade Config ---------)
+	npx mega-linter-runner@latest --upgrade
 # ------------------------------------ #
 
 # ------- Docker Containers ---------- #

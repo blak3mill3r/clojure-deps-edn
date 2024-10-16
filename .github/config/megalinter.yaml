@@ -2,10 +2,10 @@
 # Configuration file for MegaLinter
 #
 # General configuration:
-# https://oxsecurity.github.io/megalinter/configuration/
+# https://megalinter.io/latest/config-file/
 #
 # Specific Linters:
-# https://oxsecurity.github.io/megalinter/latest/supported-linters/
+# https://megalinter.io/latest/supported-linters/
 
 # ------------------------
 # Linters
@@ -24,6 +24,7 @@ ENABLE:
   - SPELL
   - YAML
   - REPOSITORY
+
 
 # Linter specific configuration
 
@@ -86,6 +87,9 @@ SHOW_ELAPSED_TIME: true
 
 # Upload reports to file.io
 FILEIO_REPORTER: false
+
+# Grafana Dashboard Connections - GitHub Organization secrets
+# API_REPORTER_DEBUG: true
 
 # ------------------------
 
