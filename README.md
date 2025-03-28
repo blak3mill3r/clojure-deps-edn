@@ -11,6 +11,8 @@
 
 [Practicalli Clojure CLI Config](https://github.com/practicalli/clojure-cli-config/) provides a user scope `deps.edn` file containing alias definitions for a wide range of community libraries and tools to that extend the features of Clojure CLI.
 
+`clojure -X:deps aliases` will list all the alias names at the project and user level.
+
 Aliases are qualified keywords using descriptive names to clearly convey purpose and provide a level of consistency to minimise cognitive load.
 
 Common arguments are included in alias definitions via `main-opts` and `:exec-args` to provide a default behaviour and simplify the use aliases.
@@ -19,9 +21,9 @@ Alias  used with the `-A`, `-M`, `-T` or `-X` execution options
 
 Aliases are defined to be used with all execution options `-A`, `-M`, `-P`, `-T` or `-X` where possible, otherwise use the following execution options:
 
-- `-M` for `:main-opts` configuration
-- `-X` for `:exec-opts` configuration
-- `-T` for `:exec-opts`, ignoring project dependencies
+* `-M` for `:main-opts` configuration
+* `-X` for `:exec-opts` configuration
+* `-T` for `:exec-opts`, ignoring project dependencies and only root of project as class path
 
 > [Clojure CLI - Which execution options to use](https://practical.li/clojure/clojure-cli/execution-options/)
 
@@ -36,6 +38,8 @@ The project also contains
 [Practicalli books](https://practical.li/#books) uses the Clojure CLI Config extensively to support a [REPL Reloaded workflow](https://practical.li/clojure/clojure-cli/repl-reloaded/) for Clojure projects.
 
 [Practicalli Clojure book discusses Clojure CLI and its use](https://practical.li/clojure/clojure-cli/repl/), along with video walk-through of the key features.
+
+[Practicalli Clojure CLI logo](https://github.com/practicalli/graphic-design/blob/live/logos/practicalli-clojure-cli-logo.png?raw=true)
 
 
 [![License CC By SA 4.0](https://img.shields.io/badge/license-CC%20BY--SA%204.0%20-blueviolet)](http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1)
@@ -82,7 +86,7 @@ The project also contains
 [Clojure CLI](https://clojure.org/guides/install_clojure) version **1.11.1.xxxx** or later is recommended. Check the version of Clojure CLI currently installed via:
 
 ```shell
-clojure -Sdescribe
+clojure --version
 ```
 
 > [Practicalli guide to installing Clojure](https://practical.li/clojure/install/clojure-cli/) has detailed instructions to install Clojure CLI for a specific operating system, or follow the [Clojure.org Getting Started page](https://clojure.org/guides/getting_started).
@@ -147,20 +151,20 @@ How to run common tasks for Clojure development.
 * Built-in: tasks provided by Clojure CLI
 * Practicalli: aliases provided by Practicalli Clojure CLI Config
 
-| Task                                               | Command                                                   | Configuration   |
-| -------------------------------------------------- | --------------------------------------------------------- | --------------- |
-| Create minimal playground project                  | `clojure -T:project/create`                               | Practicalli     |
-| Clojure REPL - rebel readline & nrepl server       | `clojure -M:repl/rebel`                                   | Practicalli     |
-| ClojureScript REPL with nREPL server               | `clojure -M:repl/cljs`                                    | Practicalli     |
-| Run tests / watch for changes                      | `clojure -X:test/run` / `clojure -X:test/watch`           | Practicalli     |
-| Run the project  (clojure.main)                    | `clojure -M -m domain.main-namespace`                     | Built-in        |
-| Check library dependencies for newer versions      | `clojure -T:search/outdated`                              | Practicalli     |
-| Download dependencies                              | `clojure -P`  (followed by optional aliases)              | Built-in        |
-| Generate image of project dependency graph         | `clojure -T:project/graph-deps`                           | Practicalli     |
-| Deploy library locally (~/.m2/repository)          | `clojure -X:deps mvn-install :jar '"project.jar"'`        | Built-in        |
-| Find library names (Clojars & Maven Central)       | `clojure -M:search/libraries qualified-library-names`     | Practicalli     |
-| Find available versions of a library               | `clojure -X:deps find-versions :lib domain/library-name`  | Built-in        |
-| Resolve git coord tags to shas and update deps.edn | `clojure -X:deps git-resolve-tags git-coord-tag`          | Built-in        |
+| Task                                               | Command                                                  | Configuration |
+|----------------------------------------------------|----------------------------------------------------------|---------------|
+| Create minimal playground project                  | `clojure -T:project/create`                              | Practicalli   |
+| Clojure REPL - rebel readline & nrepl server       | `clojure -M:repl/rebel`                                  | Practicalli   |
+| ClojureScript REPL with nREPL server               | `clojure -M:repl/cljs`                                   | Practicalli   |
+| Run tests / watch for changes                      | `clojure -X:test/run` / `clojure -X:test/watch`          | Practicalli   |
+| Run the project  (clojure.main)                    | `clojure -M -m domain.main-namespace`                    | Built-in      |
+| Check library dependencies for newer versions      | `clojure -T:search/outdated`                             | Practicalli   |
+| Download dependencies                              | `clojure -P`  (followed by optional aliases)             | Built-in      |
+| Generate image of project dependency graph         | `clojure -T:graph/deps`                                  | Practicalli   |
+| Deploy library locally (~/.m2/repository)          | `clojure -X:deps mvn-install :jar '"project.jar"'`       | Built-in      |
+| Find library names (Clojars & Maven Central)       | `clojure -M:search/libraries qualified-library-names`    | Practicalli   |
+| Find available versions of a library               | `clojure -X:deps find-versions :lib domain/library-name` | Built-in      |
+| Resolve git coord tags to shas and update deps.edn | `clojure -X:deps git-resolve-tags git-coord-tag`         | Built-in      |
 
 
 ## REPL terminal UI
@@ -249,9 +253,10 @@ Default values (can be over-ridden on the command line)
 | `clojure -T:project/create :template practicalli/service`       | Practicalli Service called playground     |
 
 
-> `:project/new` - uses [clj-new](https://github.com/seancorfield/clj-new) which is an archived project, although can still be used to create projects using Leiningen style templates.  A Clojure CLI configuration must be manually added if these templates do not provide one.
+> `:project/new` uses [clj-new](https://github.com/seancorfield/clj-new) which is an archived project, although can still be used to create projects using Leiningen style templates.  A Clojure CLI configuration must be manually added if these templates do not provide one.
 
-
+| Command                                                                                                 | Description                                          |
+|---------------------------------------------------------------------------------------------------------|------------------------------------------------------|
 | `clojure -T:project/new :template app :name practicalli/my-application`                                 | App project with given name                          |
 | `clojure -T:project/new :template luminus :name practicalli/full-stack-app :args '["+http-kit" "+h2"]'` | Luminus project with given name and template options |
 | `clojure -T:project/new :template figwheel-main :name practicalli/landing-page :args '["--reagent"]'`   | ClojureScript Figwheel-main project with reagent     |
@@ -287,13 +292,13 @@ Then the project can be run using `clojure -X:project/run` and arguments can opt
 * [`:search/outdated`](https://github.com/liquidz/antq) - report newer versions for maven and git dependencies
 * [`:search/outdated-mvn`](https://github.com/slipset/deps-ancient) - check for newer dependencies (maven only)
 
-| Command                                             | Description                                               |
-|-----------------------------------------------------|-----------------------------------------------------------|
-| `clojure -M:project/check`                          | detailed report of compilation errors for a project       |
-| `clojure -M:search/libraries library-name`          | fuzzy search Maven & Clojars                              |
+| Command                                            | Description                                               |
+|----------------------------------------------------|-----------------------------------------------------------|
+| `clojure -M:project/check`                         | detailed report of compilation errors for a project       |
+| `clojure -M:search/libraries library-name`         | fuzzy search Maven & Clojars                              |
 | `clojure -M:search/libraries -F:save library-name` | fuzzy search Maven & Clojars and save to project deps.edn |
-| `clojure -T:search/outdated`                        | report newer versions for maven and git dependencies      |
-| `clojure -M:search/outdated-mvn`                    | check for newer dependencies (maven only)                 |
+| `clojure -T:search/outdated`                       | report newer versions for maven and git dependencies      |
+| `clojure -M:search/outdated-mvn`                   | check for newer dependencies (maven only)                 |
 
 > `:search/libraries` will show warnings about unqualified libraries the first time it is used, which can safely be ignored
 
@@ -307,10 +312,10 @@ Then the project can be run using `clojure -X:project/run` and arguments can opt
 * [`:project/unused`](https://github.com/borkdude/carve.git) - alternative alias name for :project/carve
 * [`:project/unused-vars`](https://github.com/borkdude/carve.git) - alternative alias name for :project/carve
 
-| Command                                                                               | Description                                    |
-|---------------------------------------------------------------------------------------|------------------------------------------------|
-| `clojure -M:project/unused --opts '{:paths ["src" "test"]}'`                          | remove unused vars from the src and test paths |
-| `clojure -M:project/unused --opts '{:paths ["src" "test"] :report {:format :text}} '` | report unused vars from the src and test paths |
+| Command                                                                              | Description                                    |
+|--------------------------------------------------------------------------------------|------------------------------------------------|
+| `clojure -M:project/unused --opts '{:paths ["src" "test"]}'`                         | remove unused vars from the src and test paths |
+| `clojure -M:project/unused --opts '{:paths ["src" "test"] :report {:format :text}}'` | report unused vars from the src and test paths |
 
 Generate report in a file:
 
@@ -353,7 +358,7 @@ Tools to search through code and libraries
 * `-M:search/errors` [clj-check](https://github.com/athos/clj-check.git) - search each namespace and report compilation warnings and errors
 * `-M::search/unused-vars` [Carve](https://github.com/borkdude/carve) - search code for unused vars and remove them - optionally specifying paths `--opts '{:paths ["src" "test"]}'`
 * `-M:search/libraries` - [find-deps](https://github.com/hagmonk/find-deps) - fuzzy search Maven & Clojars and add deps to deps.edn
-* `-T:search/outdated` -  [liquidz/antq](https://github.com/liquidz/antq) - check for newer versions of libraries, updating `deps.edn` if `:update true` passed as argument
+* `-T:search/outdated` -  [liquidz/antq](https://github.com/liquidz/antq) - check for newer versions of libraries, updating `deps.edn` if `:upgrade true` passed as argument
 
 
 ### Searching library options
@@ -598,18 +603,18 @@ Web servers and other standalone services run with Clojure CLI
 
 ## Security
 
-> DEPRECATED: `:security/nvd`
-> Using clojure-nvd via an alias [checks for security issues in clojure-nvd and its dependencies as they merged into the classpath](https://github.com/practicalli/clojure-cli-config/pull/31).
->
-> The maintainer of clojure-nvd [suggested several ways to avoid classpath interference](https://github.com/rm-hull/nvd-clojure#avoiding-classpath-interference)
+`:security/nvd-scan` and `:security/ndv-fix` adds [clj-watson](https://github.com/clj-holmes/clj-watson) tool
 
-* `:service/nvd` - check library dependencies of a project against the [National Vulnerability Database](https://nvd.nist.gov/) using [nvd-clojure](https://github.com/rm-hull/nvd-clojure)
+The alias requires an [API Key to access the NIST National Vulnerability Database (NVD)](https://nvd.nist.gov/developers/request-an-api-key).
 
-| Command                                          | Description                                                        |
-|--------------------------------------------------|--------------------------------------------------------------------|
-| `clojure -T:security/nvd "" "$(clojure -Spath)"` | check all jar files on the class path for security vulnerabilities |
+`CLJ_WATSON_NVD_API_KEY` environment variable should be set to the value of the API Key, e.g via `.bashrc` or `.zshenv` file.
 
-> The first "" is required argument and can contain a filename to a json file of additional configuration.  The second argument, `"$(clojure -Spath)"`, passes the project classpath to be analysed as a string.
+| Command                        | Description                                                         |
+|------------------------------- | ------------------------------------------------------------------- |
+| `clojure -T:security/nvd-scan` | check all libraries on the class path for security vulnerabilities  |
+| `clojure -T:security/nvd-fix`  | update all libraries on the class path for security vulnerabilities |
+
+> [clj-watson-action](https://github.com/clj-holmes/clj-watson-action) can be used in a GitHub workflow to run security vulnerability checks
 
 
 ## Community activities
@@ -743,3 +748,8 @@ FreeDesktop.org `XDG_CACHE_HOME` is the recommended location for an alternative 
 `clojure -Spath` will show the current class path which will include the path to the local maven repository for the library dependencies.
 
 > NOTE: using `clojure -Sforce` forces a classpath recompute, deleting the contents of .cpcache
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=practicalli/clojure-cli-config&type=Date)](https://star-history.com/#practicalli/clojure-cli-config&Date)
