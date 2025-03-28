@@ -66,6 +66,10 @@
   :dev/env
   {:extra-paths ["dev"]}
 
+  ;; clojure -T:build
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
+          :ns-default build}
+
   ;; Practicalli REPL Reloaded workflow
   ;; https://practical.li/clojure/clojure-cli/repl-reloaded/
   ;; Use with editor command to start a REPL (Jack-in) to include REPL Reloaded tools
